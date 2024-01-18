@@ -1,3 +1,5 @@
+[![Build and Push](https://github.com/4s3ti/docker-nextcloud-full/actions/workflows/build.yaml/badge.svg?branch=main)](https://github.com/4s3ti/docker-nextcloud-full/actions/workflows/build.yaml)
+
 # docker-nextcloud-full
 Just a simple pipeline to build a Nextcloud docker image containing all dependencies (full): https://github.com/nextcloud/docker/tree/master/.examples/dockerfiles/full
 

@@ -10,6 +10,7 @@ baseRegistry="4s3ti/nextcloud-full"
 git clone https://github.com/nextcloud/docker.git 
 version=$(curl -s https://api.github.com/repos/nextcloud/server/releases/latest | jq -r '.name')
 
+
 function buildApache() {
   apache="${baseRegistry}:apache"
   latest="${baseRegistry}:latest"
@@ -19,7 +20,7 @@ function buildApache() {
   cd docker/.examples/dockerfiles/full/apache || exit 0
   docker build -t "$apache" -t "$latest" -t "$versionOnly" -t "$apacheVersion" .
 
-  for tag in $apache $latest $version $apacheVersion; do
+  for tag in $versionOnly $apache $latest $apacheVersion; do
     docker push "$tag"
   done
 }

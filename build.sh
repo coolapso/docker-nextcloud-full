@@ -5,7 +5,7 @@ if [[ -d docker ]]; then
   rm -rf docker
 fi
 
-baseRegistry="4s3ti/nextcloud-full"
+baseRegistry="coolapso/nextcloud-full"
 
 git clone https://github.com/nextcloud/docker.git 
 version=$(curl -s https://api.github.com/repos/nextcloud/server/releases/latest | jq -r '.name')

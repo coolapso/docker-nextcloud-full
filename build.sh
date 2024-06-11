@@ -10,9 +10,11 @@ baseRegistry="coolapso/nextcloud-full"
 git clone https://github.com/nextcloud/docker.git 
 version=$(curl -s https://api.github.com/repos/nextcloud/server/releases/latest | jq -r '.name')
 
-if curl -s -S "https://registry.hub.docker.com/v2/repositories/4s3ti/nextcloud-full/tags/" | jq '."results"[]["name"]' | grep -q "${version#v}"; then
-  echo "Version already published, nothing to do..."
-  exit 0
+if [[ -z $SKIP_RELEASE_CHECK ]]; then
+  if curl -s -S "https://registry.hub.docker.com/v2/repositories/coolapso/nextcloud-full/tags/" | jq '."results"[]["name"]' | grep -q "${version#v}"; then
+    echo "Version already published, nothing to do..."
+    exit 0
+  fi
 fi
 
 

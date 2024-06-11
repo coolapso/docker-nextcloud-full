@@ -1,8 +1,8 @@
-[![Build and Push](https://github.com/4s3ti/docker-nextcloud-full/actions/workflows/build.yaml/badge.svg?branch=main)](https://github.com/4s3ti/docker-nextcloud-full/actions/workflows/build.yaml)
+[![Build and Push](https://github.com/coolapso/docker-nextcloud-full/actions/workflows/build.yaml/badge.svg?branch=main)](https://github.com/coolapso/docker-nextcloud-full/actions/workflows/build.yaml)
 
 # docker-nextcloud-full
 
-[4s3ti/nextcloud-full](https://hub.docker.com/r/4s3ti/nextcloud-full)
+[coolapso/nextcloud-full](https://hub.docker.com/r/coolapso/nextcloud-full)
 
 Just a simple pipeline to build a Nextcloud docker image containing all dependencies (full): https://github.com/nextcloud/docker/tree/master/.examples/dockerfiles/full
 
@@ -11,9 +11,9 @@ It simply pulls the latest version of the repository, and builds the Dockerfiles
 
 ## Usage 
 
-Images are on docker hub: https://hub.docker.com/r/4s3ti/nextcloud-full
+Images are on docker hub: https://hub.docker.com/r/coolapso/nextcloud-full
 
-`docker pull 4s3ti/nextcloud-full:<tag>`
+`docker pull coolapso/nextcloud-full:<tag>`
 
 ## Tags
 

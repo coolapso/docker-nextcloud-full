@@ -15,18 +15,19 @@ version_check() {
   if [[ -z $SKIP_RELEASE_CHECK ]]; then
     if curl -s -S "https://registry.hub.docker.com/v2/repositories/coolapso/nextcloud-full/tags/" | jq '."results"[]["name"]' | grep -q "${version#v}-${build_type}"; then
       echo "Version ${version#v}-${build_type} already published, nothing to do..."
-      exit 0
+      return 1
     fi
   fi
 }
 
 
 function buildApache() {
-  version_check "apache"
-  apache="${baseRegistry}:apache"
+  build_type="apache"
+  version_check "apache" || return 0
+  apache="${baseRegistry}:${build_type}"
   latest="${baseRegistry}:latest"
   versionOnly="${baseRegistry}:${version#v}"
-  apacheVersion="${baseRegistry}:${version#v}-apache"
+  apacheVersion="${baseRegistry}:${version#v}-${build_type}"
 
   # cd docker/.examples/dockerfiles/full/apache || exit 0
   ## Temporarily use this dockerfile, until upstream is fixed
@@ -40,8 +41,8 @@ function buildApache() {
 }
 
 function buildFpmAlpine() {
-  build_type="fpm-alpine"
-  version_check $build_type
+  build_type="fpm-alpine" 
+  version_check $build_type || return 0
   fpmAlpine="${baseRegistry}:${build_type}"
   fpmAlpineVersion="${baseRegistry}:${version#v}-${build_type}"
 
@@ -55,7 +56,7 @@ function buildFpmAlpine() {
 
 function buildFPM() {
   build_type="fpm"
-  version_check $build_type
+  version_check $build_type || return 0
   fpm="${baseRegistry}:${build_type}"
   fpmVersion="${baseRegistry}:${version#v}-${build_type}"
 

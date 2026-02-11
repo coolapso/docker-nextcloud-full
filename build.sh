@@ -10,15 +10,19 @@ baseRegistry="coolapso/nextcloud-full"
 git clone https://github.com/nextcloud/docker.git 
 version=$(curl -s https://api.github.com/repos/nextcloud/server/releases/latest | jq -r '.name')
 
-if [[ -z $SKIP_RELEASE_CHECK ]]; then
-  if curl -s -S "https://registry.hub.docker.com/v2/repositories/coolapso/nextcloud-full/tags/" | jq '."results"[]["name"]' | grep -q "${version#v}"; then
-    echo "Version already published, nothing to do..."
-    exit 0
+version_check() {
+  build_type=$1
+  if [[ -z $SKIP_RELEASE_CHECK ]]; then
+    if curl -s -S "https://registry.hub.docker.com/v2/repositories/coolapso/nextcloud-full/tags/" | jq '."results"[]["name"]' | grep -q "${version#v}-${build_type}"; then
+      echo "Version ${version#v}-${build_type} already published, nothing to do..."
+      exit 0
+    fi
   fi
-fi
+}
 
 
 function buildApache() {
+  version_check "apache"
   apache="${baseRegistry}:apache"
   latest="${baseRegistry}:latest"
   versionOnly="${baseRegistry}:${version#v}"
@@ -36,8 +40,10 @@ function buildApache() {
 }
 
 function buildFpmAlpine() {
-  fpmAlpine="${baseRegistry}:fpm-alpine"
-  fpmAlpineVersion="${baseRegistry}:${version#v}-fpm-alpine"
+  build_type="fpm-alpine"
+  version_check $build_type
+  fpmAlpine="${baseRegistry}:${build_type}"
+  fpmAlpineVersion="${baseRegistry}:${version#v}-${build_type}"
 
   cd $project_root/docker/.examples/dockerfiles/full/fpm-alpine || exit 0
   docker build -t "$fpmAlpine" -t "$fpmAlpineVersion" .
@@ -48,8 +54,10 @@ function buildFpmAlpine() {
 }
 
 function buildFPM() {
-  fpm="${baseRegistry}:fpm"
-  fpmVersion="${baseRegistry}:${version#v}-fpm"
+  build_type="fpm"
+  version_check $build_type
+  fpm="${baseRegistry}:${build_type}"
+  fpmVersion="${baseRegistry}:${version#v}-${build_type}"
 
   cd $project_root/docker/.examples/dockerfiles/full/fpm || exit 0
   docker build -t "$fpm" -t "$fpmVersion" .

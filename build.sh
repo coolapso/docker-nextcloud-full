@@ -46,7 +46,10 @@ function buildFpmAlpine() {
   fpmAlpine="${baseRegistry}:${build_type}"
   fpmAlpineVersion="${baseRegistry}:${version#v}-${build_type}"
 
-  cd $project_root/docker/.examples/dockerfiles/full/fpm-alpine || exit 0
+  ## cd $project_root/docker/.examples/dockerfiles/full/fpm-alpine || exit 0
+  ## Temporarily use this dockerfile, until upstream is fixed
+  ## https://github.com/nextcloud/docker/issues/2456
+  cd $project_root/patchedFpmAlpine || exit 0
   docker build -t "$fpmAlpine" -t "$fpmAlpineVersion" .
 
   for tag in $fpmAlpine $fpmAlpineVersion; do
@@ -60,7 +63,10 @@ function buildFPM() {
   fpm="${baseRegistry}:${build_type}"
   fpmVersion="${baseRegistry}:${version#v}-${build_type}"
 
-  cd $project_root/docker/.examples/dockerfiles/full/fpm || exit 0
+  ## cd $project_root/docker/.examples/dockerfiles/full/fpm || exit 0
+  ## Temporarily use this dockerfile, until upstream is fixed
+  ## https://github.com/nextcloud/docker/issues/2456
+  cd $project_root/patchedFpm || exit 0
   docker build -t "$fpm" -t "$fpmVersion" .
 
   for tag in $fpm $fpmVersion; do

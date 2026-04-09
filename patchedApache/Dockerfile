@@ -1,4 +1,5 @@
-FROM nextcloud:apache
+ARG NEXTCLOUD_VERSION=apache
+FROM nextcloud:${NEXTCLOUD_VERSION}
 
 RUN set -ex; \
     \

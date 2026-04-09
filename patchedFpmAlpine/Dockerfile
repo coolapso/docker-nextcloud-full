@@ -1,4 +1,5 @@
-FROM nextcloud:fpm-alpine
+ARG NEXTCLOUD_VERSION=fpm-alpine
+FROM nextcloud:${NEXTCLOUD_VERSION}
 
 RUN set -ex; \
     \
@@ -22,7 +23,7 @@ RUN set -ex; \
     docker-php-ext-install \
         bz2 \
     ; \
-    pecl install smbclient; \
+    pecl install smbclient-1.1.2; \
     docker-php-ext-enable smbclient; \
     \
     runDeps="$( \
@@ -31,7 +32,7 @@ RUN set -ex; \
             | sort -u \
             | awk 'system("[ -e /usr/local/lib/" $1 " ]") == 0 { next } { print "so:" $1 }' \
     )"; \
-    apk add --virtual .nextcloud-phpext-rundeps $runDeps; \
+    apk add --no-cache --virtual .nextcloud-phpext-rundeps $runDeps; \
     apk del .build-deps
 
 RUN mkdir -p \

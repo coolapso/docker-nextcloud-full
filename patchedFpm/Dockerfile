@@ -1,4 +1,5 @@
-FROM nextcloud:fpm
+ARG NEXTCLOUD_VERSION=fpm
+FROM nextcloud:${NEXTCLOUD_VERSION}
 
 RUN set -ex; \
     \
@@ -18,12 +19,20 @@ RUN set -ex; \
     \
     apt-get update; \
     apt-get install -y --no-install-recommends \
+        ca-certificates \
+        curl \
+        gnupg \
         libbz2-dev \
         libkrb5-dev \
         libsmbclient-dev \
     ; \
     \
-    curl -s https://packages.sury.org/php/README.txt | bash -x; \
+    mkdir -p /etc/apt/keyrings; \
+    curl -fsSL https://packages.sury.org/php/apt.gpg \
+        | gpg --dearmor -o /etc/apt/keyrings/sury-php.gpg; \
+    . /etc/os-release; \
+    echo "deb [signed-by=/etc/apt/keyrings/sury-php.gpg] https://packages.sury.org/php/ ${VERSION_CODENAME} main" > /etc/apt/sources.list.d/sury-php.list; \
+    apt-get update; \
     apt-get install -y --no-install-recommends \
     libc-client2007e-dev \
     ; \
@@ -32,7 +41,7 @@ RUN set -ex; \
         bz2 \
         imap \
     ; \
-    pecl install smbclient; \
+    pecl install smbclient-1.1.2; \
     docker-php-ext-enable smbclient; \
     \
 # reset apt-mark's "manual" list so that "purge --auto-remove" will remove all build dependencies

@@ -7,8 +7,12 @@ fi
 project_root=${PWD}
 baseRegistry="coolapso/nextcloud-full"
 
-git clone https://github.com/nextcloud/docker.git 
+git clone https://github.com/nextcloud/docker.git
 version=$(curl -s https://api.github.com/repos/nextcloud/server/releases/latest | jq -r '.name')
+
+# Checkout the upstream docker repo at the specific version tag so the example
+# Dockerfiles match the release we are building.
+git -C docker checkout "v${version}" 2>/dev/null || echo "Warning: tag v${version} not found in upstream repo, using default branch" >&2
 
 version_check() {
   build_type=$1
@@ -33,7 +37,7 @@ function buildApache() {
   ## Temporarily use this dockerfile, until upstream is fixed
   ## https://github.com/nextcloud/docker/issues/2456
   cd patchedApache || exit 0
-  docker build -t "$apache" -t "$latest" -t "$versionOnly" -t "$apacheVersion" .
+  docker build --build-arg "NEXTCLOUD_VERSION=${version#v}-apache" -t "$apache" -t "$latest" -t "$versionOnly" -t "$apacheVersion" .
 
   for tag in $versionOnly $apache $latest $apacheVersion; do
     docker push "$tag"
@@ -49,8 +53,8 @@ function buildFpmAlpine() {
   ## cd $project_root/docker/.examples/dockerfiles/full/fpm-alpine || exit 0
   ## Temporarily use this dockerfile, until upstream is fixed
   ## https://github.com/nextcloud/docker/issues/2456
-  cd $project_root/patchedFpmAlpine || exit 0
-  docker build -t "$fpmAlpine" -t "$fpmAlpineVersion" .
+  cd "$project_root/patchedFpmAlpine" || exit 0
+  docker build --build-arg "NEXTCLOUD_VERSION=${version#v}-fpm-alpine" -t "$fpmAlpine" -t "$fpmAlpineVersion" .
 
   for tag in $fpmAlpine $fpmAlpineVersion; do
     docker push "$tag"
@@ -66,8 +70,8 @@ function buildFPM() {
   ## cd $project_root/docker/.examples/dockerfiles/full/fpm || exit 0
   ## Temporarily use this dockerfile, until upstream is fixed
   ## https://github.com/nextcloud/docker/issues/2456
-  cd $project_root/patchedFpm || exit 0
-  docker build -t "$fpm" -t "$fpmVersion" .
+  cd "$project_root/patchedFpm" || exit 0
+  docker build --build-arg "NEXTCLOUD_VERSION=${version#v}-fpm" -t "$fpm" -t "$fpmVersion" .
 
   for tag in $fpm $fpmVersion; do
     docker push "$tag"

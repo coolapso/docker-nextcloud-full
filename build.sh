@@ -50,9 +50,11 @@ function buildFpmAlpine() {
   fpmAlpine="${baseRegistry}:${build_type}"
   fpmAlpineVersion="${baseRegistry}:${version#v}-${build_type}"
 
-  cd $project_root/docker/.examples/dockerfiles/full/fpm-alpine || exit 0
-  # Pin the base image to the exact version to prevent image/version mismatch
-  sed "s|FROM nextcloud:fpm-alpine|FROM nextcloud:${version#v}-fpm-alpine|" Dockerfile | docker build -t "$fpmAlpine" -t "$fpmAlpineVersion" -f - .
+  ## cd $project_root/docker/.examples/dockerfiles/full/fpm-alpine || exit 0
+  ## Temporarily use this dockerfile, until upstream is fixed
+  ## https://github.com/nextcloud/docker/issues/2456
+  cd "$project_root/patchedFpmAlpine" || exit 0
+  docker build --build-arg "NEXTCLOUD_VERSION=${version#v}-fpm-alpine" -t "$fpmAlpine" -t "$fpmAlpineVersion" .
 
   for tag in $fpmAlpine $fpmAlpineVersion; do
     docker push "$tag"
@@ -65,9 +67,11 @@ function buildFPM() {
   fpm="${baseRegistry}:${build_type}"
   fpmVersion="${baseRegistry}:${version#v}-${build_type}"
 
-  cd $project_root/docker/.examples/dockerfiles/full/fpm || exit 0
-  # Pin the base image to the exact version to prevent image/version mismatch
-  sed "s|FROM nextcloud:fpm|FROM nextcloud:${version#v}-fpm|" Dockerfile | docker build -t "$fpm" -t "$fpmVersion" -f - .
+  ## cd $project_root/docker/.examples/dockerfiles/full/fpm || exit 0
+  ## Temporarily use this dockerfile, until upstream is fixed
+  ## https://github.com/nextcloud/docker/issues/2456
+  cd "$project_root/patchedFpm" || exit 0
+  docker build --build-arg "NEXTCLOUD_VERSION=${version#v}-fpm" -t "$fpm" -t "$fpmVersion" .
 
   for tag in $fpm $fpmVersion; do
     docker push "$tag"

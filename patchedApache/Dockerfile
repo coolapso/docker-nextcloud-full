@@ -24,14 +24,10 @@ RUN set -ex; \
         libsmbclient-dev \
     ; \
     \
-    curl -s https://packages.sury.org/php/README.txt | bash -x; \
-    apt-get install -y --no-install-recommends \
-    libc-client2007e-dev \
-    ; \
-    docker-php-ext-configure imap --with-kerberos --with-imap-ssl; \
+ \
+     \
     docker-php-ext-install \
         bz2 \
-        imap \
     ; \
     pecl install smbclient; \
     docker-php-ext-enable smbclient; \

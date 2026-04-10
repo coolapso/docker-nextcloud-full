@@ -7,12 +7,13 @@ fi
 project_root=${PWD}
 baseRegistry="coolapso/nextcloud-full"
 
-git clone https://github.com/nextcloud/docker.git
+# No need to clone now that the repo is using patched  docker files 
+# git clone https://github.com/nextcloud/docker.git
 version=$(curl -s https://api.github.com/repos/nextcloud/server/releases/latest | jq -r '.name')
 
 # Checkout the upstream docker repo at the specific version tag so the example
 # Dockerfiles match the release we are building.
-git -C docker checkout "v${version}" 2>/dev/null || echo "Warning: tag v${version} not found in upstream repo, using default branch" >&2
+# git -C docker checkout "${version}" 2>/dev/null || echo "Warning: tag ${version} not found in upstream repo, using default branch" >&2
 
 version_check() {
   build_type=$1

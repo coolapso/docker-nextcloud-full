@@ -33,13 +33,9 @@ RUN set -ex; \
     . /etc/os-release; \
     echo "deb [signed-by=/etc/apt/keyrings/sury-php.gpg] https://packages.sury.org/php/ ${VERSION_CODENAME} main" > /etc/apt/sources.list.d/sury-php.list; \
     apt-get update; \
-    apt-get install -y --no-install-recommends \
-    libc-client2007e-dev \
-    ; \
-    docker-php-ext-configure imap --with-kerberos --with-imap-ssl; \
+     \
     docker-php-ext-install \
         bz2 \
-        imap \
     ; \
     pecl install smbclient-1.1.2; \
     docker-php-ext-enable smbclient; \

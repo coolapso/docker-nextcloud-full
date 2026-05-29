@@ -1,3 +1,8 @@
+> [!WARNING]  
+> I have **stopped** using Nextcloud; therefore, my interest in maintaining this repository has ended.  
+> This repository was created with the intention of providing regular builds from the upstream Dockerfiles. While I had intended to continue maintaining it, constant upstream breaking changes are making this more **difficult**, and something I don't really want to deal with anymore.  
+> Proper Dockerfiles should be provided by **the** upstream team, which seems to constantly neglect them.
+
 [![Build and Push](https://github.com/coolapso/docker-nextcloud-full/actions/workflows/build.yaml/badge.svg?branch=main)](https://github.com/coolapso/docker-nextcloud-full/actions/workflows/build.yaml)
 
 # docker-nextcloud-full
